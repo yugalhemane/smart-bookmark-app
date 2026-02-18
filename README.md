@@ -4,7 +4,7 @@ A full-stack bookmark management application built with Next.js (App Router), Su
 
 ## 🚀 Live Demo
 
-👉 Live URL: https://your-vercel-url.vercel.app  
+👉 Live URL: https://smart-bookmark-app-two-inky-68.vercel.app/  
 👉 GitHub Repo: https://github.com/yugalhemane/smart-bookmark-app
 
 ---
@@ -176,7 +176,4 @@ Drag & drop reordering
 Persistent dark mode (localStorage)
 
 Unit tests
-
-### 👨‍💻 Author
-
-Built as part of a full-stack assessment using modern web technologies.
+```
