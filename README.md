@@ -1,36 +1,182 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Smart Bookmark Manager
 
-## Getting Started
+A full-stack bookmark management application built with Next.js (App Router), Supabase (Auth + Database + Realtime), and Tailwind CSS.
 
-First, run the development server:
+## 🚀 Live Demo
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+👉 Live URL: https://your-vercel-url.vercel.app  
+👉 GitHub Repo: https://github.com/yugalhemane/smart-bookmark-app
+
+---
+
+## 🛠 Tech Stack
+
+- **Frontend:** Next.js 16 (App Router)
+- **Authentication:** Supabase Auth (Google OAuth only)
+- **Database:** Supabase Postgres
+- **Realtime:** Supabase Realtime (Postgres changes)
+- **Styling:** Tailwind CSS
+- **Notifications:** react-hot-toast
+- **Deployment:** Vercel
+
+---
+
+## ✨ Features
+
+### 🔐 Authentication
+- Google OAuth login only
+- Secure session management
+- Logout functionality
+- Private bookmarks per user (RLS enforced)
+
+### 📌 Bookmark Management
+- Add bookmark (Title + URL)
+- Delete bookmark with confirmation
+- Disabled Add button when inputs are empty
+- Clean empty state UI
+
+### ⚡ Realtime Updates
+- Bookmarks update instantly across multiple tabs
+- Uses Supabase Realtime with Postgres replication
+
+### 🎨 Professional UI
+- Responsive design (mobile + desktop)
+- Hamburger menu on mobile
+- Dark mode toggle
+- Loading spinner
+- Toast notifications
+- Avatar + user profile display
+
+---
+
+## 🔒 Database Design
+
+### Table: `bookmarks`
+
+| Column      | Type        | Description |
+|-------------|------------|-------------|
+| id          | uuid       | Primary key |
+| user_id     | uuid       | References auth.users |
+| title       | text       | Bookmark title |
+| url         | text       | Bookmark URL |
+| created_at  | timestamptz| Timestamp |
+
+---
+
+## 🔐 Row Level Security (RLS)
+
+RLS is enabled to ensure users can only access their own data.
+
+Policies used:
+
+### SELECT
+```sql
+user_id = auth.uid()
+
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+### INSERT
+user_id = auth.uid()
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+```
+### DELETE
+user_id = auth.uid()
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+This guarantees strict data isolation between users.
 
-## Learn More
+```
 
-To learn more about Next.js, take a look at the following resources:
+### ⚙️ Setup Instructions (Local Development)
+1️⃣ Clone the Repository
+git clone https://github.com/yugalhemane/smart-bookmark-app.git
+cd smart-bookmark-app
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+2️⃣ Install Dependencies
+npm install
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+3️⃣ Create .env.local
+NEXT_PUBLIC_SUPABASE_URL=https://your-project-id.supabase.co
+NEXT_PUBLIC_SUPABASE_ANON_KEY=your_anon_key
 
-## Deploy on Vercel
+4️⃣ Run Development Server
+npm run dev
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+Visit:
+
+http://localhost:3000
+
+### 🚀 Deployment
+
+The application is deployed using Vercel.
+
+Steps:
+
+Push project to GitHub
+
+Import repository into Vercel
+
+Add environment variables
+
+Deploy
+
+### 🧠 Challenges Faced & Solutions
+1️⃣ Supabase RLS Policy Errors
+
+Initially, the table schema was incomplete, which caused policy failures.
+Solution: Dropped and recreated the table using correct SQL with foreign key reference.
+
+2️⃣ Realtime Not Triggering
+
+Realtime did not work initially because the table was not added to the supabase_realtime publication.
+Solution: Enabled realtime via table settings / SQL:
+
+ALTER PUBLICATION supabase_realtime ADD TABLE bookmarks;
+
+3️⃣ Hydration Mismatch Warning
+
+Next.js showed hydration mismatch warnings during development.
+Cause: Browser extensions modifying DOM before React hydration.
+Solution: Tested in incognito mode and confirmed no production impact.
+
+4️⃣ Environment Variable Issues
+
+Supabase requests failed due to incorrect .env.local configuration.
+Solution: Corrected environment variables and restarted dev server.
+
+5️⃣ Mobile Navbar UX
+
+Initial navbar was not optimized for mobile view.
+Solution: Implemented hamburger menu for small screens.
+
+### 🔥 What Makes This Production-Ready
+
+Proper RLS enforcement
+
+Secure OAuth-only authentication
+
+Realtime synchronization
+
+Responsive professional UI
+
+Clean component structure
+
+Error handling & feedback
+
+Loading states
+
+### 📌 Future Improvements
+
+Edit bookmark feature
+
+Folder categorization
+
+Drag & drop reordering
+
+Persistent dark mode (localStorage)
+
+Unit tests
+
+### 👨‍💻 Author
+
+Built as part of a full-stack assessment using modern web technologies.
